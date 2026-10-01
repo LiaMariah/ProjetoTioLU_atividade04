@@ -1,20 +1,18 @@
-﻿using AcademiaDoZe.Domain.Entities;
+using AcademiaDoZe.Domain.Entities;
 using AcademiaDoZe.Domain.ValueObjects;
 using AcademiaDoZe.Infrastructure.Data;
 using AcademiaDoZe.Infrastructure.Repositories;
 
 namespace AcademiaDoZe.Infrastructure.Tests;
 
-public sealed class LogradouroRepositoryTests
+public sealed class LogradouroRepositoryTests : TestBase
 {
-    private const string ConnectionString =
-        "Server=localhost,1433;Database=db_academia_do_ze;User Id=sa;Password=abcBolinhas12345;TrustServerCertificate=True;Encrypt=True;";
+    private readonly LogradouroRepository _repository;
 
-    private readonly LogradouroRepository _repository =
-        new(ConnectionString, DatabaseType.SqlServer);
-
-    private static string GerarCep() =>
-        Random.Shared.Next(10000000, 99999999).ToString();
+    public LogradouroRepositoryTests()
+    {
+        _repository = new LogradouroRepository(ConnectionString, DatabaseType);
+    }
 
     private static Logradouro CriarLogradouro()
     {

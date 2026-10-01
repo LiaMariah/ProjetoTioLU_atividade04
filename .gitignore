@@ -1,0 +1,21 @@
+# Arquivos gerados pela compilação do .NET
+[Bb]in/
+[Oo]bj/
+
+# Configurações locais do Visual Studio
+.vs/
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+
+# Resultados de testes e cobertura
+[Tt]est[Rr]esults/
+coverage/
+*.coverage
+*.coveragexml
+
+# Arquivos temporários do sistema
+.DS_Store
+Thumbs.db
+Desktop.ini

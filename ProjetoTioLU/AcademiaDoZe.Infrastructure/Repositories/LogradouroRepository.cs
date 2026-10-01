@@ -6,15 +6,16 @@ using AcademiaDoZe.Infrastructure.Data;
 using AcademiaDoZe.Infrastructure.Exceptions;
 using Microsoft.Data.SqlClient;
 using System.Data;
+using System.Data.Common;
 
 namespace AcademiaDoZe.Infrastructure.Repositories;
 
-public sealed class LogradouroRepository : ILogradouroRepository
+public sealed class LogradouroRepository : BaseRepository, ILogradouroRepository
 {
     private readonly string _connectionString;
     private readonly DatabaseType _databaseType;
 
-    public LogradouroRepository(string connectionString, DatabaseType databaseType)
+    public LogradouroRepository(string connectionString, DatabaseType databaseType) : base(connectionString, databaseType)
     {
         if (string.IsNullOrWhiteSpace(connectionString))
             throw new InfrastructureException("CONEXAO_STRING_VAZIA", "String de conexão não pode ser vazia.");
@@ -58,16 +59,16 @@ public sealed class LogradouroRepository : ILogradouroRepository
 
     private const string SelectSql = "SELECT id_logradouro, cep, nome, bairro, cidade, estado, pais FROM dbo.tb_logradouro";
 
-    private static Logradouro Map(SqlDataReader reader)
+    public static Logradouro Map(DbDataReader reader, string nomeColumn = "nome")
     {
         var result = Logradouro.Criar(
-            reader.GetInt32(0),
-            reader.GetString(1),
-            reader.GetString(2),
-            reader.GetString(3),
-            reader.GetString(4),
-            reader.GetString(5),
-            reader.GetString(6));
+            reader.GetInt32Value("id_logradouro"),
+            reader.GetStringValue("cep"),
+            reader.GetStringValue(nomeColumn),
+            reader.GetStringValue("bairro"),
+            reader.GetStringValue("cidade"),
+            reader.GetStringValue("estado"),
+            reader.GetStringValue("pais"));
 
         if (result.IsFailure || result.Value is null)
             throw new InfrastructureException("ERRO_MAPEAMENTO_LOGRADOURO", "Não foi possível mapear o logradouro retornado pelo banco.");
